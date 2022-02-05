@@ -1,9 +1,6 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(snake)
 
-# Before:
-# $ sudo apt-get install libncurses5-dev
-
 find_package(Curses REQUIRED)
 include_directories(${CURSES_INCLUDE_DIRS})
 
