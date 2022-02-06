@@ -30,6 +30,18 @@ void NCursesDisplay::UpdateHighScore(WINDOW* window, WINDOW* gameWindow, int win
     wrefresh(window);
 }
 
+int kbhit(void)
+{
+    int ch = getch();
+
+    if (ch != ERR) {
+        ungetch(ch);
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
 /**
  * @brief Display the snake game on the terminal.
  * 
@@ -64,26 +76,28 @@ void NCursesDisplay::Display(Player player) {
     wmove(gameWindow, 1, 1);
     wrefresh(gameWindow);
 
-    int row = 1, col = 1;
     const int gameWindowHeight = height - scoreWindowHeight - 3;
     while(player.alive) {
-        getyx(gameWindow, row, col);
+        getyx(gameWindow, player.y, player.x);
         UpdatePoints(scoreWindow, gameWindow, width, player);
-        wmove(gameWindow, row, col);
+        wmove(gameWindow, player.y, player.x);
         wrefresh(gameWindow);
 
-        int c = getch();
+        if(kbhit()) {
+            int c = getch();
 
-        if(c == DOWN_ARROW && row < gameWindowHeight) {
-            row += 1;
-        } else if (c == RIGHT_ARROW && col < width - 2) {
-            col += 1;
-        } else if (c == LEFT_ARROW && col > 1) {
-            col -= 1;
-        } else if (c == UP_ARROW && row > 1) {
-            row -= 1;
+            // TODO: Convert the controls into setters for the Player class
+            if(c == DOWN_ARROW && player.y < gameWindowHeight) {
+                player.y += 1;
+            } else if (c == RIGHT_ARROW && player.x < width - 2) {
+                player.x += 1;
+            } else if (c == LEFT_ARROW && player.x > 1) {
+                player.x -= 1;
+            } else if (c == UP_ARROW && player.y > 1) {
+                player.y -= 1;
+            }
+            wmove(gameWindow, player.y, player.x);
         }
-        wmove(gameWindow, row, col);
 
         std::this_thread::sleep_for(std::chrono::microseconds(100));
     }
