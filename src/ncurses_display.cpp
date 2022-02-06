@@ -6,11 +6,6 @@
 
 #include "ncurses_display.h"
 
-const int DOWN_ARROW = 258;
-const int UP_ARROW = 259;
-const int LEFT_ARROW = 260;
-const int RIGHT_ARROW = 261;
-
 void NCursesDisplay::UpdatePoints(WINDOW* window, WINDOW* gameWindow, int windowWidth, Player player) {
     std::string pointsStr = "Points: " + std::to_string(player.points);
     mvwprintw(window, 2, (int)(windowWidth / 5), pointsStr.c_str());
@@ -65,39 +60,21 @@ void NCursesDisplay::Display(Player player) {
     wmove(gameWindow, 1, 1);
     wrefresh(gameWindow);
 
-    const int gameWindowHeight = height - scoreWindowHeight - 3;
+    const int gameWindowHeight = height - scoreWindowHeight - 2;
     while(player.alive) {
-        getyx(gameWindow, player.y, player.x);
         UpdatePoints(scoreWindow, gameWindow, width, player);
-        wmove(gameWindow, player.y, player.x);
+        wmove(gameWindow, player.Y(), player.X());
         wrefresh(gameWindow);
 
         int c = getch();
 
-        if(c != ERR) {
-            // TODO: Convert the controls into setters for the Player class
-            if(c == DOWN_ARROW && player.y < gameWindowHeight) {
-                player.y += 1;
-            } else if (c == RIGHT_ARROW && player.x < width - 2) {
-                player.x += 1;
-            } else if (c == LEFT_ARROW && player.x > 1) {
-                player.x -= 1;
-            } else if (c == UP_ARROW && player.y > 1) {
-                player.y -= 1;
-            }
-            wmove(gameWindow, player.y, player.x);
-        }
+        player.move(c, width - 1, gameWindowHeight);
+        wmove(gameWindow, player.Y(), player.X());
 
-        std::this_thread::sleep_for(std::chrono::microseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 
     // UpdateHighScore(scoreWindow, gameWindow, width, player);
-
-    int c = getch();
-
-    printw("%d ", c);
-
-    getch();            // waits for user input, returns int value of that key
 
     endwin();           // deallocates memory and ends ncurses
 }
