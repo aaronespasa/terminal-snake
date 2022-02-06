@@ -30,18 +30,6 @@ void NCursesDisplay::UpdateHighScore(WINDOW* window, WINDOW* gameWindow, int win
     wrefresh(window);
 }
 
-int kbhit(void)
-{
-    int ch = getch();
-
-    if (ch != ERR) {
-        ungetch(ch);
-        return 1;
-    } else {
-        return 0;
-    }
-}
-
 /**
  * @brief Display the snake game on the terminal.
  * 
@@ -52,6 +40,7 @@ void NCursesDisplay::Display(Player player) {
     cbreak();               // terminate on CTRL + C
     start_color();          // enable color
     keypad(stdscr, TRUE);   // gets the arrow input as a single int instead of 3
+    nodelay(stdscr, TRUE);  // avoids waiting for the input
 
     // stdscr is the default window
     int width = getmaxx(stdscr);    
@@ -83,9 +72,9 @@ void NCursesDisplay::Display(Player player) {
         wmove(gameWindow, player.y, player.x);
         wrefresh(gameWindow);
 
-        if(kbhit()) {
-            int c = getch();
+        int c = getch();
 
+        if(c != ERR) {
             // TODO: Convert the controls into setters for the Player class
             if(c == DOWN_ARROW && player.y < gameWindowHeight) {
                 player.y += 1;
@@ -99,7 +88,7 @@ void NCursesDisplay::Display(Player player) {
             wmove(gameWindow, player.y, player.x);
         }
 
-        std::this_thread::sleep_for(std::chrono::microseconds(100));
+        std::this_thread::sleep_for(std::chrono::microseconds(1000));
     }
 
     // UpdateHighScore(scoreWindow, gameWindow, width, player);
