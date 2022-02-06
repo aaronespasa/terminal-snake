@@ -3,5 +3,5 @@
 
 int main(int argc, char const *argv[]) {
     Player player;
-    NCursesDisplay::Display(player);
+    NCursesDisplay::display(player);
 }

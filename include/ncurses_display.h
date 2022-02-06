@@ -4,10 +4,15 @@
 #include "player.h"
 #include <ncurses.h>
 
+const int Y_KEY = 121;
+const int N_KEY = 110;
+
 namespace NCursesDisplay {
-    void Display(Player player);
-    void UpdatePoints(WINDOW* window, WINDOW* gameWindow, int windowWidth, Player player);
-    void UpdateHighScore(WINDOW* window, WINDOW* gameWindow, int windowWidth, Player player);
+    void display(Player player);
+    void updatePoints(WINDOW* window, WINDOW* gameWindow, int windowWidth, Player player);
+    void updateHighScore(WINDOW* window, WINDOW* gameWindow, int windowWidth, Player player);
+    void game(WINDOW* scoreWindow, WINDOW* gameWindow, int windowWidth, int windowHeight,
+              Player player);
 }
 
 #endif // !NCURSES_DISPLAY_H
