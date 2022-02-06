@@ -4,11 +4,17 @@ int Player::X() { return x; }
 int Player::Y() { return y; }
 
 void Player::X(int newX, int windowWidth) {
-    if(newX > 0 && newX < windowWidth) { x = newX; }
+    if(newX > 0 && newX < windowWidth) 
+        x = newX;
+    else
+        alive = false;
 }
 
 void Player::Y(int newY, int windowHeight) {
-    if(newY > 0 && newY < windowHeight) { y = newY; }
+    if(newY > 0 && newY < windowHeight) 
+        y = newY;
+    else
+        alive = false;
 }
 
 void Player::move(int keyNumber, int windowWidth, int windowHeight) {
