@@ -7,13 +7,15 @@
 #include "ncurses_display.h"
 
 void NCursesDisplay::updatePoints(WINDOW* window, WINDOW* gameWindow, int windowWidth, Player player) {
+    // TODO: Modify points whenever the player eats a food
     std::string pointsStr = "Points: " + std::to_string(player.points);
     mvwprintw(window, 2, (int)(windowWidth / 5), pointsStr.c_str());
     wrefresh(window);
 }
 
 void NCursesDisplay::updateHighScore(WINDOW* window, WINDOW* gameWindow, int windowWidth, Player player) {
-    // updates the highscore
+    // TODO: Modify the highscore when the player dies and the highscore is greater
+    // than the previous one
     std::string highScoreStr = "High Score: " + std::to_string(player.highScore);
     mvwprintw(window, 2, 2 * (int)(windowWidth / 3), highScoreStr.c_str());
     wrefresh(window);
@@ -46,6 +48,7 @@ void NCursesDisplay::game(WINDOW* scoreWindow, WINDOW* gameWindow, int windowWid
 
     nodelay(stdscr, FALSE);  // waits for the input
 
+    // TODO: Create a Game Over window
     wprintw(gameWindow, "You have lost :(");
     wrefresh(gameWindow);
 }
@@ -88,6 +91,7 @@ void NCursesDisplay::display(Player player) {
 
     refresh();          // refreshes the whole screen
 
+    // TODO: Add colors
     box(scoreWindow, 0, 0);
     wrefresh(scoreWindow); 
 

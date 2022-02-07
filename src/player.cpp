@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "player.h"
 
 PlayerElement::PlayerElement(int x, int y, int windowWidth, int windowHeight) {
@@ -25,6 +27,7 @@ void PlayerElement::Y(int newY, int windowHeight) {
 void Player::respawn(int windowWidth, int windowHeight) {
     body.clear();   // remove all the elements from the deque
 
+    // TODO: The player dies when some element of it coincides with another one
     PlayerElement playerElement1(1, 2, windowWidth, windowHeight);
     body.push_front(playerElement1);
 
@@ -70,6 +73,9 @@ void Player::move(int keyNumber, int windowWidth, int windowHeight) {
             body.push_front(tail);
             break;
     }
+
+    // TODO: If the head coindices with a food, push back a playerElement
+    // and remove the food from the NCursesDisplay list of foods
 
     // if the head is dead, then the player is also dead
     if(!body.front().alive) { alive = false; }
