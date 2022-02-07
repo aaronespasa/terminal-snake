@@ -9,6 +9,8 @@ const int N_KEY = 110;
 
 namespace NCursesDisplay {
     void display(Player player);
+    void displayPlayerElementInPosition(WINDOW* gameWindow, PlayerElement &head);
+    void clearPlayerTailFromDisplay(WINDOW* gameWindow, PlayerElement &head, PlayerElement &tail);
     void updatePoints(WINDOW* window, WINDOW* gameWindow, int windowWidth, Player player);
     void updateHighScore(WINDOW* window, WINDOW* gameWindow, int windowWidth, Player player);
     void game(WINDOW* scoreWindow, WINDOW* gameWindow, int windowWidth, int windowHeight,
