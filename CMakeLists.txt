@@ -11,3 +11,5 @@ add_executable(snake ${SOURCES})
 
 set_property(TARGET snake PROPERTY CXX_STANDARD 17)
 target_link_libraries(snake ${CURSES_LIBRARIES})
+
+#target_compile_options(snake PRIVATE -Wall -Wextra)
