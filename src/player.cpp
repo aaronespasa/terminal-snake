@@ -1,20 +1,35 @@
 #include "player.h"
 
-int Player::X() { return x; }
-int Player::Y() { return y; }
+PlayerElement::PlayerElement(int x, int y, int windowWidth, int windowHeight) {
+    X(1, windowWidth);
+    Y(1, windowHeight);
+}
 
-void Player::X(int newX, int windowWidth) {
+int PlayerElement::X() { return x; }
+int PlayerElement::Y() { return y; }
+
+void PlayerElement::X(int newX, int windowWidth) {
     if(newX > 0 && newX < windowWidth) 
         x = newX;
     else
         alive = false;
 }
 
-void Player::Y(int newY, int windowHeight) {
+void PlayerElement::Y(int newY, int windowHeight) {
     if(newY > 0 && newY < windowHeight) 
         y = newY;
     else
         alive = false;
+}
+
+void Player::respawn(int windowWidth, int windowHeight) {
+    body.clear();   // remove all the elements from the deque
+
+    PlayerElement playerElement1(1, 2, windowWidth, windowHeight);
+    body.push_front(playerElement1);
+
+    PlayerElement playerElement2(1, 1, windowWidth, windowHeight);
+    body.push_front(playerElement2);
 }
 
 void Player::move(int keyNumber, int windowWidth, int windowHeight) {
@@ -26,20 +41,38 @@ void Player::move(int keyNumber, int windowWidth, int windowHeight) {
     else 
         newDirection = keyPair->second; // update the direction
 
+    // get the first element to take its coordinates
+    PlayerElement head = body.front();
+
+    // get and pop the last element of the deque
+    PlayerElement tail = body.back();
+    body.pop_back();
+
     switch(newDirection) {
         case LEFT:
-            X(X()-1, windowWidth);
+            tail.X(head.X()-1, windowWidth);
+            tail.Y(head.Y(), windowHeight);
+            body.push_front(tail);
             break;
         case RIGHT:
-            X(X()+1, windowWidth);
+            tail.X(head.X()+1, windowWidth);
+            tail.Y(head.Y(), windowHeight);
+            body.push_front(tail);
             break;
         case UP:
-            Y(Y()-1, windowHeight);
+            tail.X(head.X(), windowWidth);
+            tail.Y(head.Y()-1, windowHeight);
+            body.push_front(tail);
             break;
         case DOWN:
-            Y(Y()+1, windowHeight);
+            tail.X(head.X(), windowWidth);
+            tail.Y(head.Y()+1, windowHeight);
+            body.push_front(tail);
             break;
     }
+
+    // if the head is dead, then the player is also dead
+    if(!body.front().alive) { alive = false; }
 
     // update the direction (or maintain the previous one)
     direction = newDirection;
