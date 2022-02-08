@@ -23,6 +23,7 @@ class Food {
         bool isPointInsideOfPlayerOrFoods(Point& newFoodPoint, std::deque<PlayerElement>& playerBody);
 
         std::vector<Point> foodsMap;
+        std::string displayIcon{"@"};
     private:
         int windowHeight{1};
         int windowWidth{1};
