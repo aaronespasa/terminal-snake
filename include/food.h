@@ -23,8 +23,8 @@ class Food {
 
         std::vector<Point> foodsMap;
     private:
-        int windowHeight;
-        int windowWidth;
+        int windowHeight{1};
+        int windowWidth{1};
 };
 
 #endif // !FOOD_H
