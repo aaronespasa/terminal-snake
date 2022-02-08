@@ -12,7 +12,7 @@ struct Point {
 
 class Food {
     public:
-        Food(int windowHeight, int windowWidth);
+        Food(int newWindowHeight, int newWindowWidth);
 
         int windowHeight();
         int windowWidth();
