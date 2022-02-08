@@ -20,6 +20,7 @@ class Food {
         void windowWidth(int newWindowWidth);
 
         void spawnFood(int number, std::deque<PlayerElement> &playerBody);
+        void clearFoodAndSpawn(int number, std::deque<PlayerElement> &playerBody);
         bool isPointInsideOfPlayerOrFoods(Point& newFoodPoint, std::deque<PlayerElement>& playerBody);
 
         std::vector<Point> foodsMap;

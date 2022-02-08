@@ -59,3 +59,9 @@ void Food::spawnFood(int number, std::deque<PlayerElement>& playerBody) {
         spawnFood.push_back(newFoodPoint);
     }
 }
+
+void Food::clearFoodAndSpawn(int number, std::deque<PlayerElement> &playerBody) {
+    foodsMap.clear();
+
+    spawnFood(number, playerBody);
+}
