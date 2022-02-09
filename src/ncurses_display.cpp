@@ -66,6 +66,14 @@ void NCursesDisplay::displayPlayerElementInPosition(WINDOW* gameWindow,
     mvwprintw(gameWindow, head.Y(), head.X(), head.displayIcon.c_str());
 }
 
+void NCursesDisplay::displayFood(WINDOW* gameWindow, Food &food, PlayerElement &head) {
+    for(Point foodPoint : food.foodsMap) {
+        mvwprintw(gameWindow, foodPoint.y, foodPoint.x, food.displayIcon.c_str());
+    }
+
+    wmove(gameWindow, head.Y(), head.X());
+}
+
 /**
  * @brief Display the snake game on the terminal.
  * 
@@ -101,6 +109,7 @@ void NCursesDisplay::display(Player player) {
     updateHighScore(scoreWindow, gameWindow, width, player);
     updatePoints(scoreWindow, gameWindow, width, player);
 
+    Food food(gameWindowHeight, width);
     bool userWantToContinuePlaying = true;
 
     while(userWantToContinuePlaying) {
@@ -111,6 +120,10 @@ void NCursesDisplay::display(Player player) {
         player.direction = RIGHT;
         player.points = 0;
         player.alive = true;
+
+        food.spawnFood(1, player.body);
+        displayFood(gameWindow, food, player.body.front());
+
         wrefresh(gameWindow);
 
         game(scoreWindow, gameWindow, width, gameWindowHeight, player);
