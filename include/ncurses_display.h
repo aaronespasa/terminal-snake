@@ -17,7 +17,7 @@ namespace NCursesDisplay {
     void updatePoints(WINDOW* window, WINDOW* gameWindow, int windowWidth, Player player);
     void updateHighScore(WINDOW* window, WINDOW* gameWindow, int windowWidth, Player player);
     void game(WINDOW* scoreWindow, WINDOW* gameWindow, int windowWidth, int windowHeight,
-              Player player);
+              Player& player, Food& food);
 }
 
 #endif // !NCURSES_DISPLAY_H
