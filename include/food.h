@@ -14,10 +14,10 @@ class Food {
     public:
         Food(int newWindowHeight, int newWindowWidth);
 
-        int windowHeight();
-        int windowWidth();
-        void windowHeight(int newWindowHeight);
-        void windowWidth(int newWindowWidth);
+        int getWindowHeight();
+        int getWindowWidth();
+        void setWindowHeight(int newWindowHeight);
+        void setWindowWidth(int newWindowWidth);
 
         void spawnFood(int number, std::deque<PlayerElement> &playerBody);
         void clearFoodAndSpawn(int number, std::deque<PlayerElement> &playerBody);

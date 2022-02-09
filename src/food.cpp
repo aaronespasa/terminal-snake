@@ -3,17 +3,17 @@
 #include "food.h"
 
 Food::Food(int newWindowHeight, int newWindowWidth) {
-    windowHeight(newWindowHeight);
-    windowWidth(newWindowWidth);
+    setWindowHeight(newWindowHeight);
+    setWindowWidth(newWindowWidth);
 }
 
-int Food::windowHeight() { return windowHeight; }
-int Food::windowWidth() { return windowWidth; }
+int Food::getWindowHeight() { return windowHeight; }
+int Food::getWindowWidth() { return windowWidth; }
 
-void Food::windowHeight(int newWindowHeight) {
+void Food::setWindowHeight(int newWindowHeight) {
     if(newWindowHeight > 0) windowHeight = newWindowHeight;
 }
-void Food::windowWidth(int newWindowWidth) {
+void Food::setWindowWidth(int newWindowWidth) {
     if(newWindowWidth > 0) windowWidth = newWindowWidth;
 }
 
