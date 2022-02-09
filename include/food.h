@@ -26,8 +26,8 @@ class Food {
         std::vector<Point> foodsMap;
         std::string displayIcon{"@"};
     private:
-        int windowHeight{1};
-        int windowWidth{1};
+        int windowHeight;
+        int windowWidth;
 };
 
 #endif // !FOOD_H
