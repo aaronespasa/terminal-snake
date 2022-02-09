@@ -47,14 +47,15 @@ bool Food::isPointInsideOfPlayerOrFoods(Point& newFoodPoint, std::deque<PlayerEl
     return true;
 }
 
+// TODO: Solve isPointInsideOfPlayerOrFoods method
 void Food::spawnFood(int number, std::deque<PlayerElement>& playerBody) {
     // get where's the player to avoid putting food over it
     for(int i=0; i < number; i++) {
         Point newFoodPoint;
-        do {
-            newFoodPoint.x = randint(1, windowWidth);
-            newFoodPoint.y = randint(1, windowHeight);
-        } while(isPointInsideOfPlayerOrFoods(newFoodPoint, playerBody));
+        // do {
+            newFoodPoint.x = randint(1, getWindowWidth());
+            newFoodPoint.y = randint(1, getWindowHeight());
+        // } while(isPointInsideOfPlayerOrFoods(newFoodPoint, playerBody));
 
         foodsMap.push_back(newFoodPoint);
     }
