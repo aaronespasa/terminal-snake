@@ -56,7 +56,7 @@ void Food::spawnFood(int number, std::deque<PlayerElement>& playerBody) {
             newFoodPoint.y = randint(1, windowHeight);
         } while(isPointInsideOfPlayerOrFoods(newFoodPoint, playerBody));
 
-        spawnFood.push_back(newFoodPoint);
+        foodsMap.push_back(newFoodPoint);
     }
 }
 
