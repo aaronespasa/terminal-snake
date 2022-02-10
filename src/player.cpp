@@ -24,6 +24,30 @@ void PlayerElement::Y(int newY, int windowHeight) {
         alive = false;
 }
 
+void Player::incrementSize(int windowWidth, int windowHeight) {
+    int tailX = body.back().X();
+    int tailY = body.back().Y();
+
+    switch(direction) {
+        case LEFT:
+            tailX += 1;
+            break;
+        case RIGHT:
+            tailX -= 1;
+            break;
+        case UP:
+            tailY += 1;
+            break;
+        case DOWN:
+            tailY -= 1;
+            break;
+    }
+
+    PlayerElement newBodyElement(tailX, tailY, windowWidth, windowHeight);
+    
+    body.push_back(newBodyElement);
+}
+
 void Player::respawn(int windowWidth, int windowHeight) {
     body.clear();   // remove all the elements from the deque
 
