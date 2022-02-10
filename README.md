@@ -1,5 +1,7 @@
 # Terminal Snake Game 🐍
 
+![Terminal Snake GIF](https://github.com/aaronespasa/terminal-snake/blob/main/terminal-snake.gif)
+
 ## Getting Started
 🗂 Clone the repository: 
 ```sh
