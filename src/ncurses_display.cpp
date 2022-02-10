@@ -14,22 +14,43 @@ void NCursesDisplay::updatePoints(WINDOW* window, WINDOW* gameWindow, int window
 }
 
 void NCursesDisplay::updateHighScore(WINDOW* window, WINDOW* gameWindow, int windowWidth, Player player) {
-    // TODO: Modify the highscore when the player dies and the highscore is greater
-    // than the previous one
-    std::string highScoreStr = "High Score: " + std::to_string(player.highScore);
-    mvwprintw(window, 2, 2 * (int)(windowWidth / 3), highScoreStr.c_str());
-    wrefresh(window);
+    if(player.points > player.highScore) player.highScore = player.points;
 
-    wmove(gameWindow, player.body.front().Y(), player.body.front().X());
-    wrefresh(gameWindow);     
+    std::string highScoreStr = "High Score: " + std::to_string(player.highScore);
+        mvwprintw(window, 2, 2 * (int)(windowWidth / 3), highScoreStr.c_str());
+        wrefresh(window);
+
+        wmove(gameWindow, player.body.front().Y(), player.body.front().X());
+        wrefresh(gameWindow);    
+}
+
+void NCursesDisplay::removeFoodIfEaten(WINDOW* gameWindow, Food& food, Player& player,
+                                       int windowWidth, int windowHeight) {
+    for(int i=0; i < food.foodsMap.size(); i++) {
+            if(player.body.front().X() == food.foodsMap[i].x &&
+               player.body.front().Y() == food.foodsMap[i].y) {
+                   food.foodsMap.erase(food.foodsMap.begin() + i);
+
+                   player.points += 1;
+                   player.incrementSize(windowWidth, windowHeight);
+
+                   food.spawnFood(1, player.body);
+                   displayFood(gameWindow, food, player.body.front());
+            }
+    }
+}
+
+void NCursesDisplay::displayGameOverWindow(WINDOW* gameWindow, int windowWidth, int windowHeight) {
+    mvwprintw(gameWindow, windowHeight/2, windowWidth/2 - 10, "GAME OVER");
 }
 
 void NCursesDisplay::game(WINDOW* scoreWindow, WINDOW* gameWindow, int windowWidth,
-                          int windowHeight, Player player) {
+                          int windowHeight, Player& player, Food& food) {
     nodelay(stdscr, TRUE);  // avoids waiting for the input
     int difficulty = 3;     // 1 (easy), 2 (medium), 3 (hard)
     
     while(player.alive) {
+        removeFoodIfEaten(gameWindow, food, player, windowWidth, windowHeight);
         updatePoints(scoreWindow, gameWindow, windowWidth, player);
         displayPlayerElementInPosition(gameWindow, player.body.front());
         wrefresh(gameWindow);
@@ -43,13 +64,13 @@ void NCursesDisplay::game(WINDOW* scoreWindow, WINDOW* gameWindow, int windowWid
 
         std::this_thread::sleep_for(std::chrono::milliseconds(300 / difficulty));
     }
+    food.foodsMap.clear();
 
     updateHighScore(scoreWindow, gameWindow, windowWidth, player);
 
     nodelay(stdscr, FALSE);  // waits for the input
 
-    // TODO: Create a Game Over window
-    wprintw(gameWindow, "You have lost :(");
+    displayGameOverWindow(gameWindow, windowWidth, windowHeight);
     wrefresh(gameWindow);
 }
 
@@ -72,6 +93,12 @@ void NCursesDisplay::displayFood(WINDOW* gameWindow, Food &food, PlayerElement &
     }
 
     wmove(gameWindow, head.Y(), head.X());
+}
+
+void NCursesDisplay::clearGameWindow(WINDOW* gameWindow) {
+    wclear(gameWindow);
+    box(gameWindow, 0 , 0);
+    wrefresh(gameWindow); 
 }
 
 /**
@@ -102,17 +129,15 @@ void NCursesDisplay::display(Player player) {
     // TODO: Add colors
     box(scoreWindow, 0, 0);
     wrefresh(scoreWindow); 
-
-    box(gameWindow, 0 , 0);
-    wrefresh(gameWindow); 
     
     updateHighScore(scoreWindow, gameWindow, width, player);
     updatePoints(scoreWindow, gameWindow, width, player);
 
-    Food food(gameWindowHeight, width);
+    Food food(gameWindowHeight-1, width);
     bool userWantToContinuePlaying = true;
 
     while(userWantToContinuePlaying) {
+        clearGameWindow(gameWindow);
         // move the player to the initial point and restart default values
         player.respawn(width, gameWindowHeight);
 
@@ -126,7 +151,7 @@ void NCursesDisplay::display(Player player) {
 
         wrefresh(gameWindow);
 
-        game(scoreWindow, gameWindow, width, gameWindowHeight, player);
+        game(scoreWindow, gameWindow, width, gameWindowHeight, player, food);
 
         int c = getch();
         
