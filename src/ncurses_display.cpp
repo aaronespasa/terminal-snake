@@ -6,6 +6,11 @@
 
 #include "ncurses_display.h"
 
+#define PLAYER_COLOR_PAIR 1
+#define GRASS_COLOR_PAIR 2
+#define FOOD_COLOR_PAIR 3
+#define WHITE_BOX_COLOR_PAIR 4
+
 void NCursesDisplay::updatePoints(WINDOW* window, WINDOW* gameWindow, int windowWidth, Player player) {
     // TODO: Modify points whenever the player eats a food
     std::string pointsStr = "Points: " + std::to_string(player.points);
@@ -84,12 +89,16 @@ void NCursesDisplay::clearPlayerTailFromDisplay(WINDOW* gameWindow,
 
 void NCursesDisplay::displayPlayerElementInPosition(WINDOW* gameWindow,
                                                     PlayerElement &head) {
+    wattron(gameWindow, COLOR_PAIR(PLAYER_COLOR_PAIR));
     mvwprintw(gameWindow, head.Y(), head.X(), head.displayIcon.c_str());
+    wattroff(gameWindow, COLOR_PAIR(PLAYER_COLOR_PAIR));
 }
 
 void NCursesDisplay::displayFood(WINDOW* gameWindow, Food &food, PlayerElement &head) {
     for(Point foodPoint : food.foodsMap) {
+        wattron(gameWindow, COLOR_PAIR(FOOD_COLOR_PAIR));
         mvwprintw(gameWindow, foodPoint.y, foodPoint.x, food.displayIcon.c_str());
+        wattroff(gameWindow, COLOR_PAIR(FOOD_COLOR_PAIR));
     }
 
     wmove(gameWindow, head.Y(), head.X());
@@ -97,8 +106,13 @@ void NCursesDisplay::displayFood(WINDOW* gameWindow, Food &food, PlayerElement &
 
 void NCursesDisplay::clearGameWindow(WINDOW* gameWindow) {
     wclear(gameWindow);
+    wbkgd(gameWindow, COLOR_PAIR(GRASS_COLOR_PAIR));
+    
+    wattron(gameWindow, COLOR_PAIR(WHITE_BOX_COLOR_PAIR));
     box(gameWindow, 0 , 0);
-    wrefresh(gameWindow); 
+    wattroff(gameWindow, COLOR_PAIR(WHITE_BOX_COLOR_PAIR));
+
+    wrefresh(gameWindow);
 }
 
 /**
@@ -110,9 +124,21 @@ void NCursesDisplay::display(Player player) {
     initscr();              // start ncurses (sets up memory & clears the screen)
     noecho();               // do not print input values
     cbreak();               // terminate on CTRL + C
-    start_color();          // enable color
     keypad(stdscr, TRUE);   // gets the arrow input as a single int instead of 3
     curs_set(0);
+
+    if(has_colors() == FALSE) {
+        endwin();
+        printf("Your terminal does not support colors :(\n");
+        exit(1);
+    }
+    start_color();          // enable color
+
+    const int BASE_COLOR = COLOR_GREEN;
+    init_pair(PLAYER_COLOR_PAIR, COLOR_MAGENTA, BASE_COLOR);
+    init_pair(GRASS_COLOR_PAIR, BASE_COLOR, BASE_COLOR);
+    init_pair(FOOD_COLOR_PAIR, COLOR_RED, BASE_COLOR);
+    init_pair(WHITE_BOX_COLOR_PAIR, COLOR_WHITE, BASE_COLOR);
 
     // stdscr is the default window
     int width = getmaxx(stdscr);    
