@@ -8,12 +8,14 @@
 const int Y_KEY = 121;
 const int N_KEY = 110;
 
-// TODO: Display the created foods
 namespace NCursesDisplay {
     void display(Player player);
-    void displayPlayerElementInPosition(WINDOW* gameWindow, PlayerElement &head);
-    void displayFood(WINDOW* gameWindow, Food& food, PlayerElement &head);
-    void clearPlayerTailFromDisplay(WINDOW* gameWindow, PlayerElement &head, PlayerElement &tail);
+    void displayPlayerElementInPosition(WINDOW* gameWindow, PlayerElement& head);
+    void displayFood(WINDOW* gameWindow, Food& food, PlayerElement& head);
+    void displayGameOverWindow(WINDOW* gameWindow, int windowWidth, int windowHeight);
+    void clearGameWindow(WINDOW* gameWindow);
+    void removeFoodIfEaten(WINDOW* gameWindow, Food& food, Player& player, int windowWidth, int windowHeight);
+    void clearPlayerTailFromDisplay(WINDOW* gameWindow, PlayerElement& head, PlayerElement& tail);
     void updatePoints(WINDOW* window, WINDOW* gameWindow, int windowWidth, Player player);
     void updateHighScore(WINDOW* window, WINDOW* gameWindow, int windowWidth, Player player);
     void game(WINDOW* scoreWindow, WINDOW* gameWindow, int windowWidth, int windowHeight,
