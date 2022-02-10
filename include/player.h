@@ -34,7 +34,8 @@ class Player {
         std::deque<PlayerElement> body;
 
         void respawn(int windowWidth, int windowHeight);
-        void move(int keyNumber, int windowWidth, int windowHeight);     
+        void move(int keyNumber, int windowWidth, int windowHeight);  
+        void incrementSize(int windowWidth, int windowHeight);   
 
         int points{0};
         int highScore{0};
