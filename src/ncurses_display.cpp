@@ -159,7 +159,7 @@ void NCursesDisplay::display(Player player) {
     updateHighScore(scoreWindow, gameWindow, width, player);
     updatePoints(scoreWindow, gameWindow, width, player);
 
-    Food food(gameWindowHeight-1, width);
+    Food food(gameWindowHeight-1, width-1);
     bool userWantToContinuePlaying = true;
 
     while(userWantToContinuePlaying) {
