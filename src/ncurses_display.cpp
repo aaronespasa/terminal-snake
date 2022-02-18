@@ -40,7 +40,7 @@ void NCursesDisplay::removeFoodIfEaten(WINDOW* gameWindow, Food& food, Player& p
                    player.incrementSize(windowWidth, windowHeight);
 
                    food.spawnFood(1, player.body);
-                   displayFood(gameWindow, food, player.body.front());
+                   displayFood(gameWindow, &food, &player.body.front());
             }
     }
 }
@@ -94,14 +94,14 @@ void NCursesDisplay::displayPlayerElementInPosition(WINDOW* gameWindow,
     wattroff(gameWindow, COLOR_PAIR(PLAYER_COLOR_PAIR));
 }
 
-void NCursesDisplay::displayFood(WINDOW* gameWindow, Food &food, PlayerElement &head) {
-    for(Point foodPoint : food.foodsMap) {
+void NCursesDisplay::displayFood(WINDOW* gameWindow, Food* food, PlayerElement* head) {
+    for(Point foodPoint : food->foodsMap) {
         wattron(gameWindow, COLOR_PAIR(FOOD_COLOR_PAIR));
-        mvwprintw(gameWindow, foodPoint.y, foodPoint.x, food.displayIcon.c_str());
+        mvwprintw(gameWindow, foodPoint.y, foodPoint.x, food->displayIcon.c_str());
         wattroff(gameWindow, COLOR_PAIR(FOOD_COLOR_PAIR));
     }
 
-    wmove(gameWindow, head.Y(), head.X());
+    wmove(gameWindow, head->Y(), head->X());
 }
 
 void NCursesDisplay::clearGameWindow(WINDOW* gameWindow) {
@@ -173,7 +173,7 @@ void NCursesDisplay::display(Player player) {
         player.alive = true;
 
         food.spawnFood(1, player.body);
-        displayFood(gameWindow, food, player.body.front());
+        displayFood(gameWindow, &food, &player.body.front());
 
         wrefresh(gameWindow);
 
