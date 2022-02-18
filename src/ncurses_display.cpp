@@ -57,7 +57,7 @@ void NCursesDisplay::game(WINDOW* scoreWindow, WINDOW* gameWindow, int windowWid
     while(player.alive) {
         removeFoodIfEaten(gameWindow, food, player, windowWidth, windowHeight);
         updatePoints(scoreWindow, gameWindow, windowWidth, player);
-        displayPlayerElementInPosition(gameWindow, player.body.front());
+        displayPlayerElementInPosition(gameWindow, &player.body.front());
         wrefresh(gameWindow);
         
         clearPlayerTailFromDisplay(gameWindow, player.body.front(), player.body.back());
@@ -88,9 +88,9 @@ void NCursesDisplay::clearPlayerTailFromDisplay(WINDOW* gameWindow,
 }
 
 void NCursesDisplay::displayPlayerElementInPosition(WINDOW* gameWindow,
-                                                    PlayerElement &head) {
+                                                    PlayerElement* head) {
     wattron(gameWindow, COLOR_PAIR(PLAYER_COLOR_PAIR));
-    mvwprintw(gameWindow, head.Y(), head.X(), head.displayIcon.c_str());
+    mvwprintw(gameWindow, head->Y(), head->X(), head->displayIcon.c_str());
     wattroff(gameWindow, COLOR_PAIR(PLAYER_COLOR_PAIR));
 }
 
@@ -167,7 +167,7 @@ void NCursesDisplay::display(Player player) {
         // move the player to the initial point and restart default values
         player.respawn(width, gameWindowHeight);
 
-        displayPlayerElementInPosition(gameWindow, player.body.front());
+        displayPlayerElementInPosition(gameWindow, &player.body.front());
         player.direction = RIGHT;
         player.points = 0;
         player.alive = true;

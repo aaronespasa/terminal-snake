@@ -10,7 +10,7 @@ const int N_KEY = 110;
 
 namespace NCursesDisplay {
     void display(Player player);
-    void displayPlayerElementInPosition(WINDOW* gameWindow, PlayerElement& head);
+    void displayPlayerElementInPosition(WINDOW* gameWindow, PlayerElement* head);
     void displayFood(WINDOW* gameWindow, Food& food, PlayerElement& head);
     void displayGameOverWindow(WINDOW* gameWindow, int windowWidth, int windowHeight);
     void clearGameWindow(WINDOW* gameWindow);
