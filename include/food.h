@@ -19,9 +19,9 @@ class Food {
         void setWindowHeight(int newWindowHeight);
         void setWindowWidth(int newWindowWidth);
 
-        void spawnFood(int number, std::deque<PlayerElement> &playerBody);
-        void clearFoodAndSpawn(int number, std::deque<PlayerElement> &playerBody);
-        bool isPointInsideOfPlayerOrFoods(Point& newFoodPoint, std::deque<PlayerElement>& playerBody);
+        void spawnFood(int number, std::deque<PlayerElement>* playerBody);
+        void clearFoodAndSpawn(int number, std::deque<PlayerElement>* playerBody);
+        bool isPointInsideOfPlayerOrFoods(Point* newFoodPoint, std::deque<PlayerElement>* playerBody);
 
         std::vector<Point> foodsMap;
         std::string displayIcon{"@"};

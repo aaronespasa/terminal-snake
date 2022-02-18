@@ -39,7 +39,7 @@ void NCursesDisplay::removeFoodIfEaten(WINDOW* gameWindow, Food& food, Player& p
                    player.points += 1;
                    player.incrementSize(windowWidth, windowHeight);
 
-                   food.spawnFood(1, player.body);
+                   food.spawnFood(1, &player.body);
                    displayFood(gameWindow, &food, &player.body.front());
             }
     }
@@ -172,7 +172,7 @@ void NCursesDisplay::display(Player player) {
         player.points = 0;
         player.alive = true;
 
-        food.spawnFood(1, player.body);
+        food.spawnFood(1, &player.body);
         displayFood(gameWindow, &food, &player.body.front());
 
         wrefresh(gameWindow);
