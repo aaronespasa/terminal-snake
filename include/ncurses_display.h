@@ -14,12 +14,12 @@ namespace NCursesDisplay {
     void displayFood(WINDOW* gameWindow, Food* food, PlayerElement* head);
     void displayGameOverWindow(WINDOW* gameWindow, int windowWidth, int windowHeight);
     void clearGameWindow(WINDOW* gameWindow);
-    void removeFoodIfEaten(WINDOW* gameWindow, Food& food, Player& player, int windowWidth, int windowHeight);
-    void clearPlayerTailFromDisplay(WINDOW* gameWindow, PlayerElement& head, PlayerElement& tail);
-    void updatePoints(WINDOW* window, WINDOW* gameWindow, int windowWidth, Player player);
-    void updateHighScore(WINDOW* window, WINDOW* gameWindow, int windowWidth, Player player);
+    void removeFoodIfEaten(WINDOW* gameWindow, Food* food, Player* player, int windowWidth, int windowHeight);
+    void clearPlayerTailFromDisplay(WINDOW* gameWindow, PlayerElement* head, PlayerElement* tail);
+    void updatePoints(WINDOW* window, WINDOW* gameWindow, int windowWidth, Player* player);
+    void updateHighScore(WINDOW* window, WINDOW* gameWindow, int windowWidth, Player* player);
     void game(WINDOW* scoreWindow, WINDOW* gameWindow, int windowWidth, int windowHeight,
-              Player& player, Food& food);
+              Player* player, Food* food);
 }
 
 #endif // !NCURSES_DISPLAY_H

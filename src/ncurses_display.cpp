@@ -11,36 +11,36 @@
 #define FOOD_COLOR_PAIR 3
 #define WHITE_BOX_COLOR_PAIR 4
 
-void NCursesDisplay::updatePoints(WINDOW* window, WINDOW* gameWindow, int windowWidth, Player player) {
+void NCursesDisplay::updatePoints(WINDOW* window, WINDOW* gameWindow, int windowWidth, Player* player) {
     // TODO: Modify points whenever the player eats a food
-    std::string pointsStr = "Points: " + std::to_string(player.points);
+    std::string pointsStr = "Points: " + std::to_string(player->points);
     mvwprintw(window, 2, (int)(windowWidth / 5), pointsStr.c_str());
     wrefresh(window);
 }
 
-void NCursesDisplay::updateHighScore(WINDOW* window, WINDOW* gameWindow, int windowWidth, Player player) {
-    if(player.points > player.highScore) player.highScore = player.points;
+void NCursesDisplay::updateHighScore(WINDOW* window, WINDOW* gameWindow, int windowWidth, Player* player) {
+    if(player->points > player->highScore) player->highScore = player->points;
 
-    std::string highScoreStr = "High Score: " + std::to_string(player.highScore);
+    std::string highScoreStr = "High Score: " + std::to_string(player->highScore);
         mvwprintw(window, 2, 2 * (int)(windowWidth / 3), highScoreStr.c_str());
         wrefresh(window);
 
-        wmove(gameWindow, player.body.front().Y(), player.body.front().X());
+        wmove(gameWindow, player->body.front().Y(), player->body.front().X());
         wrefresh(gameWindow);    
 }
 
-void NCursesDisplay::removeFoodIfEaten(WINDOW* gameWindow, Food& food, Player& player,
+void NCursesDisplay::removeFoodIfEaten(WINDOW* gameWindow, Food* food, Player* player,
                                        int windowWidth, int windowHeight) {
-    for(int i=0; i < food.foodsMap.size(); i++) {
-            if(player.body.front().X() == food.foodsMap[i].x &&
-               player.body.front().Y() == food.foodsMap[i].y) {
-                   food.foodsMap.erase(food.foodsMap.begin() + i);
+    for(int i=0; i < food->foodsMap.size(); i++) {
+            if(player->body.front().X() == food->foodsMap[i].x &&
+               player->body.front().Y() == food->foodsMap[i].y) {
+                   food->foodsMap.erase(food->foodsMap.begin() + i);
 
-                   player.points += 1;
-                   player.incrementSize(windowWidth, windowHeight);
+                   player->points += 1;
+                   player->incrementSize(windowWidth, windowHeight);
 
-                   food.spawnFood(1, &player.body);
-                   displayFood(gameWindow, &food, &player.body.front());
+                   food->spawnFood(1, &(player->body));
+                   displayFood(gameWindow, food, &(player->body.front()));
             }
     }
 }
@@ -50,26 +50,26 @@ void NCursesDisplay::displayGameOverWindow(WINDOW* gameWindow, int windowWidth, 
 }
 
 void NCursesDisplay::game(WINDOW* scoreWindow, WINDOW* gameWindow, int windowWidth,
-                          int windowHeight, Player& player, Food& food) {
+                          int windowHeight, Player* player, Food* food) {
     nodelay(stdscr, TRUE);  // avoids waiting for the input
     int difficulty = 3;     // 1 (easy), 2 (medium), 3 (hard)
     
-    while(player.alive) {
+    while(player->alive) {
         removeFoodIfEaten(gameWindow, food, player, windowWidth, windowHeight);
         updatePoints(scoreWindow, gameWindow, windowWidth, player);
-        displayPlayerElementInPosition(gameWindow, &player.body.front());
+        displayPlayerElementInPosition(gameWindow, &(player->body.front()));
         wrefresh(gameWindow);
         
-        clearPlayerTailFromDisplay(gameWindow, player.body.front(), player.body.back());
+        clearPlayerTailFromDisplay(gameWindow, &(player->body.front()), &(player->body.back()));
 
         int c = getch();
 
-        player.move(c, windowWidth - 1, windowHeight);
-        wmove(gameWindow, player.body.front().Y(), player.body.front().X());
+        player->move(c, windowWidth - 1, windowHeight);
+        wmove(gameWindow, player->body.front().Y(), player->body.front().X());
 
         std::this_thread::sleep_for(std::chrono::milliseconds(300 / difficulty));
     }
-    food.foodsMap.clear();
+    food->foodsMap.clear();
 
     updateHighScore(scoreWindow, gameWindow, windowWidth, player);
 
@@ -80,11 +80,11 @@ void NCursesDisplay::game(WINDOW* scoreWindow, WINDOW* gameWindow, int windowWid
 }
 
 void NCursesDisplay::clearPlayerTailFromDisplay(WINDOW* gameWindow,
-                                                PlayerElement &head,
-                                                PlayerElement &tail) {
-    wmove(gameWindow, tail.Y(), tail.X());
+                                                PlayerElement* head,
+                                                PlayerElement* tail) {
+    wmove(gameWindow, tail->Y(), tail->X());
     wprintw(gameWindow, " ");
-    wmove(gameWindow, head.Y(), head.X());
+    wmove(gameWindow, head->Y(), head->X());
 }
 
 void NCursesDisplay::displayPlayerElementInPosition(WINDOW* gameWindow,
@@ -156,8 +156,8 @@ void NCursesDisplay::display(Player player) {
     box(scoreWindow, 0, 0);
     wrefresh(scoreWindow); 
     
-    updateHighScore(scoreWindow, gameWindow, width, player);
-    updatePoints(scoreWindow, gameWindow, width, player);
+    updateHighScore(scoreWindow, gameWindow, width, &player);
+    updatePoints(scoreWindow, gameWindow, width, &player);
 
     Food food(gameWindowHeight-1, width-1);
     bool userWantToContinuePlaying = true;
@@ -177,7 +177,7 @@ void NCursesDisplay::display(Player player) {
 
         wrefresh(gameWindow);
 
-        game(scoreWindow, gameWindow, width, gameWindowHeight, player, food);
+        game(scoreWindow, gameWindow, width, gameWindowHeight, &player, &food);
 
         int c = getch();
         
