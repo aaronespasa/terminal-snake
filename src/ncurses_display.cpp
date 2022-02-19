@@ -119,7 +119,7 @@ void NCursesDisplay::clearGameWindow(WINDOW* gameWindow) {
  * @brief Display the snake game on the terminal.
  * 
  */
-void NCursesDisplay::display(Player player) {
+void NCursesDisplay::display(Player* player) {
     setlocale(LC_ALL, "");
     initscr();              // start ncurses (sets up memory & clears the screen)
     noecho();               // do not print input values
@@ -156,8 +156,8 @@ void NCursesDisplay::display(Player player) {
     box(scoreWindow, 0, 0);
     wrefresh(scoreWindow); 
     
-    updateHighScore(scoreWindow, gameWindow, width, &player);
-    updatePoints(scoreWindow, gameWindow, width, &player);
+    updateHighScore(scoreWindow, gameWindow, width, player);
+    updatePoints(scoreWindow, gameWindow, width, player);
 
     Food food(gameWindowHeight-1, width-1);
     bool userWantToContinuePlaying = true;
@@ -165,19 +165,19 @@ void NCursesDisplay::display(Player player) {
     while(userWantToContinuePlaying) {
         clearGameWindow(gameWindow);
         // move the player to the initial point and restart default values
-        player.respawn(width, gameWindowHeight);
+        player->respawn(width, gameWindowHeight);
 
-        displayPlayerElementInPosition(gameWindow, &player.body.front());
-        player.direction = RIGHT;
-        player.points = 0;
-        player.alive = true;
+        displayPlayerElementInPosition(gameWindow, &(player->body.front()));
+        player->direction = RIGHT;
+        player->points = 0;
+        player->alive = true;
 
-        food.spawnFood(1, &player.body);
-        displayFood(gameWindow, &food, &player.body.front());
+        food.spawnFood(1, &(player->body));
+        displayFood(gameWindow, &food, &(player->body.front()));
 
         wrefresh(gameWindow);
 
-        game(scoreWindow, gameWindow, width, gameWindowHeight, &player, &food);
+        game(scoreWindow, gameWindow, width, gameWindowHeight, player, &food);
 
         int c = getch();
         
