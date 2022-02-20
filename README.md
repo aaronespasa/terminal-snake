@@ -1,5 +1,7 @@
 # Terminal Snake Game 🐍
 
+![Terminal Snake GIF](https://github.com/aaronespasa/terminal-snake/blob/main/terminal-snake.gif)
+
 ## Getting Started
 🗂 Clone the repository: 
 ```sh
@@ -13,3 +15,5 @@ $ git clone git@github.com:aaronespasa/terminal-snake.git && cd ./terminal-snake
 🔨 Build the project: `$ make build`
 
 🎉 Run the project: `$ ./build/snake`
+
+## Made with ❤️ and ☕️ by [@aaronespasa](https://github.com/aaronespasa)
